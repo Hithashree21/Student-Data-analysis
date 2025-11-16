@@ -1,0 +1,43 @@
+import csv
+import statistics
+
+
+students = [
+    {"Name": "Alice", "Math": 85, "Science": 90, "English": 78},
+    {"Name": "Bob",   "Math": 72, "Science": 88, "English": 80},
+    {"Name": "Chris", "Math": 94, "Science": 76, "English": 85},
+    {"Name": "Diana", "Math": 88, "Science": 92, "English": 90},
+]
+
+
+csv_file = "students.csv"
+
+with open(csv_file, "w", newline="") as file:
+    writer = csv.DictWriter(file, fieldnames=students[0].keys())
+    writer.writeheader()
+    writer.writerows(students)
+
+print(f"CSV file '{csv_file}' created successfully!")
+
+
+# Get average scores for each subject
+subjects = ["Math", "Science", "English"]
+averages = {sub: statistics.mean([s[sub] for s in students]) for sub in subjects}
+
+# Find student with highest total score
+for s in students:
+    s["Total"] = s["Math"] + s["Science"] + s["English"]
+
+top_student = max(students, key=lambda s: s["Total"])
+lowest_student = min(students, key=lambda s: s["Total"])
+
+print("\n=== Student Data Analysis ===")
+print("Average Scores:")
+for sub, avg in averages.items():
+    print(f"  {sub}: {avg:.2f}")
+
+print("\nTop Performer:")
+print(f"  {top_student['Name']} with total score {top_student['Total']}")
+
+print("\nLowest Performer:")
+print(f"  {lowest_student['Name']} with total score {lowest_student['Total']}")
